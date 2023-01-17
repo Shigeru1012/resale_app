@@ -1,6 +1,8 @@
 class Data {
   int? id;
-  String? agencyName;
+  int? conversationId;
+  String? currentUsername;
+  String? userName;
   bool? forSale;
   bool? forRentLong;
   bool? forRentShort;
@@ -34,11 +36,12 @@ class Data {
   String? created;
   String? updated;
   List<String>? picProperties;
-  String? thumbnailUrl;
 
   Data(
       {this.id,
-        this.agencyName,
+        this.conversationId,
+        this.currentUsername,
+        this.userName,
         this.forSale,
         this.forRentLong,
         this.forRentShort,
@@ -71,13 +74,13 @@ class Data {
         this.dimension,
         this.created,
         this.updated,
-        this.picProperties,
-        this.thumbnailUrl
-      });
+        this.picProperties});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    agencyName = json['agency_name'];
+    conversationId = json['conversation_id'];
+    currentUsername = json['current_username'];
+    userName = json['user_name'];
     forSale = json['forSale'];
     forRentLong = json['forRentLong'];
     forRentShort = json['forRentShort'];
@@ -110,14 +113,15 @@ class Data {
     dimension = json['dimension'];
     created = json['created'];
     updated = json['updated'];
-    picProperties = (json['pic_properties'] as List<dynamic>?)?.map((e) => e as String).toList() ;
-    thumbnailUrl = json['thumbnailUrl'];
+    picProperties = json['pic_properties'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['agency_name'] = this.agencyName;
+    data['conversation_id'] = this.conversationId;
+    data['current_username'] = this.currentUsername;
+    data['user_name'] = this.userName;
     data['forSale'] = this.forSale;
     data['forRentLong'] = this.forRentLong;
     data['forRentShort'] = this.forRentShort;
@@ -151,7 +155,6 @@ class Data {
     data['created'] = this.created;
     data['updated'] = this.updated;
     data['pic_properties'] = this.picProperties;
-    data['thumbnailUrl'] = this.thumbnailUrl;
     return data;
   }
 }
