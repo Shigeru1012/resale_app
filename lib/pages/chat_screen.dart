@@ -20,17 +20,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
 
-  @override
-  void initState() {
-    Provider.of<MessageProvider>(context, listen: false).fetchData();
-    super.initState();
-  }
-
+  TextEditingController messageController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+  var headers = {
+    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaW5ndXllbiIsImV4cCI6MTY3NTI0MDc2NSwiaWF0IjoxNjc1MjMxNzY1fQ.mqiuYqAoY0RsJvXsb-avu7Hhlq_kj94pXTsZY_BgAn8-v8chVDmK1FJE8toGM-F1trluuOU4tjWApHWI8jnyDg'};
   //Get Request
   Future<List<DataChat>> getData() async {
-    var headers = {
-      'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaW5ndXllbiIsImV4cCI6MTY3Mzk1NTUwMiwiaWF0IjoxNjczOTQ2NTAyfQ.IDuAlkSIAmb39vk7sdYH0Eqx9a8KIB828HAukDs8L-pMg8w9Yd3haWaevRFt2he_IZunSAeVcJzvVqGNC-ar5w'};
-    var response = await http.get(Uri.parse('https://agency-app-final.herokuapp.com/messages/${widget.senders.conversationId}'), headers: headers);
+
+    var response = await http.get(Uri.parse('https://agency-app-final.herokuapp.com/messages/${widget.senders.conversationId}?pagesize=100'), headers: headers);
 
     var jsonData = jsonDecode(response.body.toString());
     var jsonList = jsonData['data'];
@@ -45,6 +42,14 @@ class _ChatScreenState extends State<ChatScreen> {
     } else {
       return chats;
     }
+  }
+
+  addMessage() async {
+    final Uri restAPI2 = Uri.parse('https://agency-app-final.herokuapp.com/messages/send?sender_id=${widget.senders.id}&conversation_id=${widget.senders.conversationId}');
+    await http.post(restAPI2, headers:
+    {'Content-Type' : 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaW5ndXllbiIsImV4cCI6MTY3NTI0MDc2NSwiaWF0IjoxNjc1MjMxNzY1fQ.mqiuYqAoY0RsJvXsb-avu7Hhlq_kj94pXTsZY_BgAn8-v8chVDmK1FJE8toGM-F1trluuOU4tjWApHWI8jnyDg'
+    }, body: jsonEncode({"message": messageController.text}));
   }
 
   _buildMessage(DataChat message, bool isMe) {
@@ -99,37 +104,41 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  final messageController = TextEditingController();
+
   _buildMessageComposer() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       height: 70.0,
       color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              controller: messageController,
-              textCapitalization: TextCapitalization.sentences,
-              onChanged: (value) {},
-              decoration: const InputDecoration.collapsed(
-                hintText: 'Send a message...',
+      child: Form(
+        key: formKey,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextFormField(
+                controller: messageController,
+                textCapitalization: TextCapitalization.sentences,
+                validator: (value){
+                  if (value == null){
+                    return 'Insert your message';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration.collapsed(
+                  hintText: 'Send a message...',
+                ),
               ),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.send),
-            iconSize: 25.0,
-            color: Theme.of(context).primaryColor,
-            onPressed: () {
-              if(messageController.text.isNotEmpty){
-                Provider.of<MessageProvider>(context, listen: false).addMessage({
-                  "message" : messageController.text
-                });
-              }
-            },
-          ),
-        ],
+            IconButton(
+              icon: const Icon(Icons.send),
+              iconSize: 25.0,
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                addMessage();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -181,7 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             itemBuilder: (context, index) {
                             int reverseIndex = chats.length - 1 - index;
                             final DataChat message = chats[reverseIndex];
-                            final bool isMe = message.senderName.toString() == 'ninguyen';
+                            final bool isMe = message.senderName.toString() != widget.senders.userName.toString() ;
                             return _buildMessage(message, isMe);
                           }
                       );
@@ -196,3 +205,5 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+
