@@ -1,48 +1,40 @@
-class Data {
+class DataMessage {
   int? id;
-  String? senderName;
-  String? conversationName;
-  String? type;
-  String? message;
-  int? status;
-  String? created;
-  String? deleted;
+  String? userName;
+  String? lastMessage;
   String? picUser;
+  String? status;
+  int? conversationId;
+  String? created;
 
-  Data(
+  DataMessage(
       {this.id,
-        this.senderName,
-        this.conversationName,
-        this.type,
-        this.message,
+        this.userName,
+        this.lastMessage,
+        this.picUser,
         this.status,
-        this.created,
-        this.deleted,
-        this.picUser});
+        this.conversationId,
+        this.created});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataMessage.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    senderName = json['senderName'];
-    conversationName = json['conversationName'];
-    type = json['type'];
-    message = json['message'];
+    userName = json['userName'];
+    lastMessage = json['lastMessage'];
+    picUser = json['picUser'];
     status = json['status'];
+    conversationId = json['conversation_id'];
     created = json['created'];
-    deleted = json['deleted'];
-    picUser = json['pic_user'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['senderName'] = this.senderName;
-    data['conversationName'] = this.conversationName;
-    data['type'] = this.type;
-    data['message'] = this.message;
+    data['userName'] = this.userName;
+    data['lastMessage'] = this.lastMessage;
+    data['picUser'] = this.picUser;
     data['status'] = this.status;
+    data['conversation_id'] = this.conversationId;
     data['created'] = this.created;
-    data['deleted'] = this.deleted;
-    data['pic_user'] = this.picUser;
     return data;
   }
 }
