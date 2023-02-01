@@ -5,8 +5,8 @@ import 'package:resale_app/model/properties_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:shimmer/shimmer.dart';
 
+import 'chat_property.dart';
 
 class PropertyDetail extends StatefulWidget {
   final Data property;
@@ -29,9 +29,14 @@ class _PropertyDetailState extends State<PropertyDetail> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: AppColors.lightBlue),
-          title: Text(widget.property.agencyName.toString(), style: AppFonts.h14),
+          title: Text(widget.property.userName.toString(), style: AppFonts.h14),
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.insert_comment_outlined, color: AppColors.lightBlue,))
+            IconButton(onPressed: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatProperty(senders: widget.property,)));
+            },
+                icon: Icon(Icons.insert_comment_outlined, color: AppColors.lightBlue,))
           ],
         ),
         body: SingleChildScrollView(
