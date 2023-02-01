@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:resale_app/pages/app_colors.dart';
 import 'package:resale_app/pages/app_fonts.dart';
 import 'package:resale_app/pages/messages.dart';
-import 'package:resale_app/pages/send_messages.dart';
+import 'package:resale_app/pages/add_contact.dart';
 import 'package:http/http.dart' as http;
 import 'package:resale_app/model/properties_model.dart';
 import 'package:resale_app/pages/property_detail.dart';
@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               );
             }
         ),
-        title: const Text('FOR  SALE', style: AppFonts.h4),
+        title: const Text('FOR SALE', style: AppFonts.h4),
         actions: [
           IconButton(onPressed: (){}, icon: Icon(Icons.search_outlined), color: AppColors.lightPurple,)
         ],
@@ -158,7 +158,7 @@ class HomePage extends StatelessWidget {
                 onPressed: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SendMessages()),
+                    MaterialPageRoute(builder: (context) => const AddContact()),
                   );
                 },
                 icon: const Icon(Icons.people_alt_rounded, color: AppColors.lightBlue,))
@@ -182,7 +182,7 @@ class _DashboardViewPage extends State<DashboardViewPage> {
 
   Future<List<Data>> getData() async {
     var headers = {
-      'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaW5ndXllbiIsImV4cCI6MTY3MzMzMzQzNSwiaWF0IjoxNjczMzI0NDM1fQ.F37A9lRl_Rk1Gi8sF_l4Dw1pnvWV1PIBWVmBeFtRhTHjslqCL_K4PFN6ucItmOMzcf_dMNs8B4g0ieWNTerZEA'};
+      'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaW5ndXllbiIsImV4cCI6MTY3NTIzMDUxNSwiaWF0IjoxNjc1MjIxNTE1fQ.NG8fy9O2z7AoaaRumcLT75PZj82dWR-N-oYGElkca8RdgyFT7hkZbnXZGxSa7Nj6B_Rhj8IUzaHBpVlTray-5A'};
     var response = await http.get(Uri.parse('https://agency-app-final.herokuapp.com/properties'), headers: headers);
     var jsonData = jsonDecode(response.body.toString());
     var jsonList = jsonData['data'];
@@ -339,7 +339,7 @@ class _DashboardViewPage extends State<DashboardViewPage> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                        Text(property.agencyName.toString(), style: AppFonts.h2, maxLines: 2, overflow: TextOverflow.ellipsis,)
+                                                        Text(property.userName.toString(), style: AppFonts.h2, maxLines: 2, overflow: TextOverflow.ellipsis,)
                                                       ],
                                                     ),
                                                   )
